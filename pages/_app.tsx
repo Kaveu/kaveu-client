@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app"
 import { useEffect, useState } from "react"
 import Layout from "../src/components/layout"
-import { Web3Context, IWeb3Context } from "../src/stores/context"
+import * as context from "../src/stores/context"
 import { providers } from "ethers"
 
 declare global {
@@ -12,7 +12,8 @@ declare global {
 }
 
 const KaveuApp = ({ Component, pageProps }: AppProps) => {
-  const [wallet, setWallet] = useState<IWeb3Context>({})
+  const [wallet, setWallet] = useState<context.IWeb3Context>({})
+  const [error, setError] = useState<Error>()
 
   const getWallet = async () => {
     try {
@@ -20,11 +21,8 @@ const KaveuApp = ({ Component, pageProps }: AppProps) => {
         const provider = new providers.Web3Provider(window.ethereum, "any")
         const signer = provider.getSigner()
         const network = await provider.detectNetwork()
-        if (network.name == "matic" || network.name == "maticmum") {
-          console.log("Matic/Mumbai nework  selected !")
-        } else {
-          console.log("Please provide matic/mumbai network !")
-        }
+        if (network.name == "matic" || network.name == "maticmum") console.log("Matic/Mumbai nework  selected !")
+        else setError(new Error("Please provide matic or mumbai network !"))
         await provider.send("eth_requestAccounts", [])
         return { provider, signer }
       }
@@ -34,21 +32,37 @@ const KaveuApp = ({ Component, pageProps }: AppProps) => {
   }
 
   useEffect(() => {
+    let provider: providers.Web3Provider | undefined
     getWallet()
       .then((wallet) => {
-        wallet && setWallet(wallet)
-        wallet?.provider.on("network", (_n, o /** new vs old network */) => o && window.location.reload())
+        if (wallet) {
+          setWallet(wallet)
+          provider = wallet.provider
+        }
       })
       .catch((e) => console.error(e))
-    return () => {}
+
+    if (provider) {
+      provider.on("chainChanged", (_chain) => window.location.reload())
+      provider.on("accountsChanged", (_accounts) => window.location.reload())
+    }
+
+    return () => {
+      if (provider) {
+        provider.off("chainChanged", (_chain) => window.location.reload())
+        provider.off("accountsChanged", (_accounts) => window.location.reload())
+      }
+    }
   }, [])
 
   return (
-    <Web3Context.Provider value={wallet}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Web3Context.Provider>
+    <context.Web3Context.Provider value={wallet}>
+      <context.ErrorContext.Provider value={{ error, setError }}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </context.ErrorContext.Provider>
+    </context.Web3Context.Provider>
   )
 }
 

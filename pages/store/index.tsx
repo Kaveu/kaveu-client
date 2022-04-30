@@ -2,11 +2,11 @@ import type { NextPage } from "next"
 import Head from "next/head"
 import { Fragment } from "react"
 
-const Market: NextPage = () => {
+const Store: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>Kaveu | Marketplace</title>
+        <title>Kaveu | Store</title>
       </Head>
 
       <p>
@@ -18,4 +18,4 @@ const Market: NextPage = () => {
   )
 }
 
-export default Market
+export default Store
