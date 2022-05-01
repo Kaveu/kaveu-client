@@ -11,57 +11,54 @@ declare global {
   }
 }
 
-const KaveuApp = ({ Component, pageProps }: AppProps) => {
-  const [wallet, setWallet] = useState<context.IWeb3Context>({})
-  const [error, setError] = useState<Error>()
+interface WalletProvider {
+  on: (eventName: string, listener?: CallableFunction) => {}
+  off: (eventName: string) => {}
+}
 
-  const getWallet = async () => {
-    try {
-      if (window.ethereum) {
-        const provider = new providers.Web3Provider(window.ethereum, "any")
-        const signer = provider.getSigner()
-        const network = await provider.detectNetwork()
-        if (network.name == "matic" || network.name == "maticmum") console.log("Matic/Mumbai nework  selected !")
-        else setError(new Error("Please provide matic or mumbai network !"))
-        await provider.send("eth_requestAccounts", [])
-        return { provider, signer }
-      }
-    } catch (error) {
-      throw error
-    }
-  }
+const KaveuApp = ({ Component, pageProps }: AppProps) => {
+  const [web3, setWeb3] = useState<context.IWeb3Context>({})
 
   useEffect(() => {
-    let provider: providers.Web3Provider | undefined
-    getWallet()
-      .then((wallet) => {
-        if (wallet) {
-          setWallet(wallet)
-          provider = wallet.provider
+    let provider: WalletProvider
+
+    const providerInit = async () => {
+      try {
+        if (window.ethereum) {
+          const provider = new providers.Web3Provider(window.ethereum, "any")
+          const network = await provider.detectNetwork()
+          if (network.name == "matic" || network.name == "maticmum") console.log("Matic/Mumbai nework  selected !")
+          await provider.send("eth_requestAccounts", [])
+          setWeb3({ provider })
+          return provider
         }
+      } catch (error) {
+        throw error
+      }
+    }
+
+    providerInit()
+      .then((_web3) => {
+        provider = _web3?.provider as WalletProvider
+
+        console.log("listener on")
+        provider?.on("chainChanged", (chainId: any) => console.log("chainChanged", chainId))
+        provider?.on("accountsChanged", (accountsChanged: any) => console.log("accountsChanged", accountsChanged))
       })
       .catch((e) => console.error(e))
 
-    if (provider) {
-      provider.on("chainChanged", (_chain) => window.location.reload())
-      provider.on("accountsChanged", (_accounts) => window.location.reload())
-    }
-
     return () => {
-      if (provider) {
-        provider.off("chainChanged", (_chain) => window.location.reload())
-        provider.off("accountsChanged", (_accounts) => window.location.reload())
-      }
+      console.log("listener off")
+      provider?.off("chainChanged")
+      provider?.off("accountsChanged")
     }
   }, [])
 
   return (
-    <context.Web3Context.Provider value={wallet}>
-      <context.ErrorContext.Provider value={{ error, setError }}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </context.ErrorContext.Provider>
+    <context.Web3Context.Provider value={web3}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </context.Web3Context.Provider>
   )
 }

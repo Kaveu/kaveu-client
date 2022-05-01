@@ -1,7 +1,8 @@
-import { Fragment, ReactNode, useContext, useEffect, useState } from "react"
+import { CSSProperties, Fragment, ReactNode, useContext, useEffect, useState } from "react"
 import type { NextComponentType } from "next"
 import Link from "next/link"
 import { Web3Context } from "../stores/context"
+import { BigNumber, utils } from "ethers"
 
 export const Navigation: NextComponentType = () => {
   return (
@@ -47,18 +48,26 @@ export const Footer: NextComponentType = () => {
 const WalletBtn = () => {
   const { provider } = useContext(Web3Context)
   const [address, setAddress] = useState("connect")
+  const [balance, setBalance] = useState(BigNumber.from(0))
 
-  const getAddress = async () => {
+  const userInit = async () => {
     try {
-      return provider?.getSigner().getAddress()
+      let signer = provider?.getSigner()
+      let address = await signer?.getAddress()
+      let balance = await signer?.getBalance()
+      if (address) address = address.slice(0, 5) + "..." + address.slice(-3)
+      return { address, balance }
     } catch (error) {
       throw error
     }
   }
 
   useEffect(() => {
-    getAddress()
-      .then((add) => add && setAddress(add))
+    userInit()
+      .then(({ address, balance }) => {
+        address && setAddress(address)
+        balance && setBalance(balance)
+      })
       .catch((e) => console.error(e))
     return () => {}
   }, [provider])
@@ -67,9 +76,16 @@ const WalletBtn = () => {
     console.log("click??")
   }
 
+  const btnStyle: CSSProperties = {
+    padding: "5px",
+    borderRadius: "50px",
+  }
+
   return (
-    <button onClick={click} role="button">
-      {address}
+    <button onClick={click} role="button" className="outline" style={btnStyle}>
+      <small>
+        {utils.formatEther(balance)} <span>MATIC</span> <span>{address}</span>
+      </small>
     </button>
   )
 }
