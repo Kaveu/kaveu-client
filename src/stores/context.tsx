@@ -1,15 +1,12 @@
-import React, { createContext, SetStateAction, Dispatch } from "react"
-import type { providers } from "ethers"
+import { createContext } from "react"
+import type { BigNumber, providers } from "ethers"
 
 export interface IWeb3Context {
   provider?: providers.Web3Provider
+  address?: string
+  balance?: BigNumber
 }
 
-export const Web3Context = createContext<IWeb3Context>({})
+let initialeContextState: IWeb3Context = {}
 
-export interface IErrorComponent {
-  error?: Error
-  setError?: Dispatch<SetStateAction<Error | undefined>>
-}
-
-export const ErrorContext = createContext<IErrorComponent>({})
+export const Web3Context = createContext(initialeContextState)

@@ -20,8 +20,6 @@ const KaveuApp = ({ Component, pageProps }: AppProps) => {
   const [web3, setWeb3] = useState<context.IWeb3Context>({})
 
   useEffect(() => {
-    let provider: WalletProvider
-
     const providerInit = async () => {
       try {
         if (window.ethereum) {
@@ -29,7 +27,6 @@ const KaveuApp = ({ Component, pageProps }: AppProps) => {
           const network = await provider.detectNetwork()
           if (network.name == "matic" || network.name == "maticmum") console.log("Matic/Mumbai nework  selected !")
           await provider.send("eth_requestAccounts", [])
-          setWeb3({ provider })
           return provider
         }
       } catch (error) {
@@ -37,18 +34,20 @@ const KaveuApp = ({ Component, pageProps }: AppProps) => {
       }
     }
 
+    let provider: WalletProvider
     providerInit()
-      .then((_web3) => {
-        provider = _web3?.provider as WalletProvider
-
-        console.log("listener on")
-        provider?.on("chainChanged", (chainId: any) => console.log("chainChanged", chainId))
-        provider?.on("accountsChanged", (accountsChanged: any) => console.log("accountsChanged", accountsChanged))
+      .then((web3) => {
+        setWeb3({ provider: web3 })
+        provider = web3?.provider as WalletProvider
+        provider?.on("chainChanged", async (_chainId: any) => window.location.reload())
+        provider?.on("accountsChanged", async (_chainId: any) => {
+          await web3?.send("eth_requestAccounts", [])
+          setWeb3({ provider: web3 })
+        })
       })
       .catch((e) => console.error(e))
 
     return () => {
-      console.log("listener off")
       provider?.off("chainChanged")
       provider?.off("accountsChanged")
     }

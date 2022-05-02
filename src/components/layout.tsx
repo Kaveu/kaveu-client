@@ -48,14 +48,13 @@ export const Footer: NextComponentType = () => {
 const WalletBtn = () => {
   const { provider } = useContext(Web3Context)
   const [address, setAddress] = useState("connect")
-  const [balance, setBalance] = useState(BigNumber.from(0))
+  const [balance, setBalance] = useState("0")
 
   const userInit = async () => {
     try {
-      let signer = provider?.getSigner()
+      const signer = provider?.getSigner()
+      const balance = await signer?.getBalance()
       let address = await signer?.getAddress()
-      let balance = await signer?.getBalance()
-      if (address) address = address.slice(0, 5) + "..." + address.slice(-3)
       return { address, balance }
     } catch (error) {
       throw error
@@ -65,8 +64,9 @@ const WalletBtn = () => {
   useEffect(() => {
     userInit()
       .then(({ address, balance }) => {
+        if (address) address = address.slice(0, 5) + "..." + address.slice(-3)
         address && setAddress(address)
-        balance && setBalance(balance)
+        balance && setBalance(utils.formatEther(balance).slice(0, 6))
       })
       .catch((e) => console.error(e))
     return () => {}
@@ -84,7 +84,7 @@ const WalletBtn = () => {
   return (
     <button onClick={click} role="button" className="outline" style={btnStyle}>
       <small>
-        {utils.formatEther(balance)} <span>MATIC</span> <span>{address}</span>
+        {balance} <span>MATIC</span> <span>{address}</span>
       </small>
     </button>
   )

@@ -1,12 +1,13 @@
 {
   "name": "kaveu-client",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "yarn build && yarn next export"
   },
   "dependencies": {
     "ethers": "^5.6.4",
