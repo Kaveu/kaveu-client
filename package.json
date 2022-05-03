@@ -1,6 +1,6 @@
 {
   "name": "kaveu-client",
-  "version": "0.3.1",
+  "version": "0.3.1.1",
   "private": false,
   "scripts": {
     "dev": "next dev",
