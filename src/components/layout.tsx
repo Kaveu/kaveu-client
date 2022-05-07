@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useContext, useEffect, useState } from "react"
+import React, { CSSProperties, Fragment, ReactNode, useContext, useEffect, useState } from "react"
 import type { NextComponentType } from "next"
 import Link from "next/link"
 import Image from "next/image"
@@ -21,6 +21,9 @@ const Navigation: NextComponentType = () => {
       <ul>
         <li>
           <Link href="/">Home</Link>
+        </li>
+        <li>
+          <Link href="/metrics">Metrics</Link>
         </li>
         <li>
           <Link href="/store">Store</Link>
@@ -53,6 +56,7 @@ const WalletBtn = () => {
     address: "connect",
     balance: BigNumber.from(0),
   })
+  const [openModal, setModal] = useState(false)
 
   useEffect(() => {
     const init = async () => {
@@ -68,10 +72,6 @@ const WalletBtn = () => {
     init().catch((e) => console.error(e))
   }, [web3])
 
-  const click = () => {
-    console.log("click")
-  }
-
   const btnStyle: CSSProperties = {
     padding: "5px 0 5px 5px",
     borderRadius: "50px",
@@ -84,13 +84,29 @@ const WalletBtn = () => {
     borderRadius: "50px",
   }
 
+  const handleModal = () => setModal(!openModal)
+
   return (
-    <button onClick={click} role="button" className="outline" style={btnStyle}>
-      <small>
-        <span style={{ marginRight: "var(--font-size)" }}>{formatBalance(balance)} MATIC</span>
-        <span style={addrStyle}>{formatAddress(address)}</span>
-      </small>
-    </button>
+    <Fragment>
+      <button onClick={handleModal} role="button" className="outline" style={btnStyle}>
+        <small>
+          <span style={{ marginRight: "var(--font-size)" }}>{formatBalance(balance)} MATIC</span>
+          <span style={addrStyle}>{formatAddress(address)}</span>
+        </small>
+      </button>
+      <dialog open={openModal}>
+        <article style={{ padding: "var(--font-size)" }}>
+          <header>
+            <a onClick={handleModal} href="#close" aria-label="Close" className="close"></a>
+            Modal title
+          </header>
+          <p>
+            Nunc nec ligula a tortor sollicitudin dictum in vel enim. Quisque facilisis turpis vel eros dictum aliquam et nec turpis. Sed eleifend a dui nec ullamcorper. Praesent vehicula lacus ac
+            justo accumsan ullamcorper.
+          </p>
+        </article>
+      </dialog>
+    </Fragment>
   )
 }
 

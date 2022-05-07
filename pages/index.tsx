@@ -10,11 +10,16 @@ const Home: NextPage = () => {
         <meta name="description" content="Run an arbitrage bot thought the power of blockchain." />
       </Head>
 
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis ratione optio, sapiente, beatae repellat necessitatibus laborum delectus ab quis id excepturi, a fugit repellendus? Autem
-        quos saepe sequi accusamus repudiandae. Nisi quia sapiente cupiditate itaque, quae rem nemo odio nesciunt magnam consectetur pariatur quo eaque illo, commodi eum, quidem tempora id magni?
-        Molestiae quidem quisquam cum, minus nihil aliquid voluptates!
-      </p>
+      <section>
+        <article>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo distinctio vero asperiores eum laboriosam nihil expedita enim illo amet velit, ut totam voluptates neque facere modi? Illum
+            iste excepturi pariatur! Molestias quo dolorum optio dicta quam sequi asperiores corporis, velit dolorem deserunt repellendus. Aliquid unde voluptas velit pariatur explicabo eius
+            temporibus labore eos veritatis, eum assumenda accusantium numquam placeat laborum. Quis repellendus tempora aliquid non. Quibusdam iste consequuntur debitis earum praesentium inventore
+            eius numquam labore consectetur distinctio odit corporis eos fugiat obcaecati, illum sint sunt vel incidunt placeat nulla quam!
+          </p>
+        </article>
+      </section>
     </Fragment>
   )
 }

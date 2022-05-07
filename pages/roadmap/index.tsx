@@ -9,11 +9,16 @@ const Roadmap: NextPage = () => {
         <title>Kaveu | Roadmap</title>
       </Head>
 
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis ratione optio, sapiente, beatae repellat necessitatibus laborum delectus ab quis id excepturi, a fugit repellendus? Autem
-        quos saepe sequi accusamus repudiandae. Nisi quia sapiente cupiditate itaque, quae rem nemo odio nesciunt magnam consectetur pariatur quo eaque illo, commodi eum, quidem tempora id magni?
-        Molestiae quidem quisquam cum, minus nihil aliquid voluptates!
-      </p>
+      <section>
+        <article>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni accusantium numquam earum incidunt quod soluta fuga, quia voluptas quo quis in, aspernatur consequatur cum libero maiores
+            quos mollitia at optio! Debitis eveniet deleniti, vitae ullam ipsum saepe distinctio velit animi nihil itaque cumque et. Animi ipsum eveniet molestias, nisi dicta explicabo voluptas iure
+            tempore? Hic molestias commodi quae officiis quibusdam? Ab esse numquam eius ratione itaque? Ad totam quaerat recusandae dicta adipisci natus neque qui facere molestias et. Illo minima
+            dolorem aperiam, laudantium iure placeat exercitationem repudiandae ipsam fugiat animi!
+          </p>
+        </article>
+      </section>
     </Fragment>
   )
 }
