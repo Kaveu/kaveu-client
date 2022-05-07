@@ -1,10 +1,12 @@
-import { CSSProperties, Fragment, ReactNode, useContext, useEffect, useState } from "react"
+import React, { CSSProperties, ReactNode, useContext, useEffect, useState } from "react"
 import type { NextComponentType } from "next"
 import Link from "next/link"
+import Image from "next/image"
+import { BigNumber } from "ethers"
+import { formatAddress, formatBalance } from "@stores/utils"
 import { Web3Context } from "@stores/context"
-import { utils, BigNumber } from "ethers"
 
-export const Navigation: NextComponentType = () => {
+const Navigation: NextComponentType = () => {
   return (
     <nav>
       <ul>
@@ -34,46 +36,40 @@ export const Navigation: NextComponentType = () => {
   )
 }
 
-export const Footer: NextComponentType = () => {
+const Footer: NextComponentType = () => {
   return (
     <a href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
       Powered by{" "}
       <span>
-        <img src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+        <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
       </span>
     </a>
   )
 }
 
 const WalletBtn = () => {
-  const { provider, kaveu } = useContext(Web3Context)
-  const [address, setAddress] = useState("connect")
-  const [balance, setBalance] = useState(BigNumber.from(0))
-
-  const userInit = async () => {
-    try {
-      const signer = provider?.getSigner()
-      const balance = await signer?.getBalance()
-      let address = await signer?.getAddress()
-      return { address, balance }
-    } catch (error) {
-      throw error
-    }
-  }
+  const web3 = useContext(Web3Context)
+  const [{ address, balance }, setUser] = useState({
+    address: "connect",
+    balance: BigNumber.from(0),
+  })
 
   useEffect(() => {
-    userInit()
-      .then(({ address, balance }) => {
-        if (address) address = address.slice(0, 5) + "..." + address.slice(-3)
-        address && setAddress(address)
-        balance && setBalance(balance)
-      })
-      .catch((e) => console.error(e))
-    return () => {}
-  }, [provider])
+    const init = async () => {
+      const { provider } = web3
+
+      if (provider) {
+        const s = provider.getSigner()
+        const [address, balance] = await Promise.all([s.getAddress(), s.getBalance()])
+        setUser({ address, balance })
+      }
+    }
+
+    init().catch((e) => console.error(e))
+  }, [web3])
 
   const click = () => {
-    console.log("contract kaveu", kaveu)
+    console.log("click")
   }
 
   const btnStyle: CSSProperties = {
@@ -91,8 +87,8 @@ const WalletBtn = () => {
   return (
     <button onClick={click} role="button" className="outline" style={btnStyle}>
       <small>
-        <span style={{marginRight: "var(--font-size)"}}>{utils.formatEther(balance)} MATIC</span>
-        <span style={addrStyle}>{address}</span>
+        <span style={{ marginRight: "var(--font-size)" }}>{formatBalance(balance)} MATIC</span>
+        <span style={addrStyle}>{formatAddress(address)}</span>
       </small>
     </button>
   )
@@ -104,7 +100,7 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <Fragment>
+    <React.Fragment>
       <header className="container-fluid">
         <Navigation />
       </header>
@@ -112,7 +108,7 @@ const Layout = ({ children }: Props) => {
       <footer className="container-fluid">
         <Footer />
       </footer>
-    </Fragment>
+    </React.Fragment>
   )
 }
 
