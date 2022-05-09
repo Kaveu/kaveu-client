@@ -1,14 +1,15 @@
-import { IWeb3Context, ThemeContext, Web3Context } from "@stores/context"
-import { kaveuContract } from "@stores/contract"
+import { ReactNode, useEffect, useState } from "react"
 import { providers } from "ethers"
-import React, { ReactNode, useEffect, useState } from "react"
+import { initialeWeb3State, ThemeContext, Web3Context } from "@stores/context"
+import { kaveuContract } from "@stores/contract"
 import Layout from "./layout"
 
-type WalletProviderEvent = "chainChanged" | "accountsChanged" | "disconnect" | "connect"
+// https://docs.metamask.io/guide/ethereum-provider.html#events
+type WalletProviderEvent = "chainChanged" | "accountsChanged" | "disconnect" | "connect" | "message"
 
 interface WalletProvider {
-  on: (eventName: WalletProviderEvent, listener?: CallableFunction) => {}
-  removeListener: (eventName: WalletProviderEvent, listener?: CallableFunction) => {}
+  on: (eventName: WalletProviderEvent, listener?: CallableFunction) => void
+  removeListener: (eventName: WalletProviderEvent, listener?: CallableFunction) => void
   isConnected: () => boolean
 }
 
@@ -16,12 +17,9 @@ interface Props {
   children: ReactNode
 }
 
-const initialeValue = {
-  value: 0,
-}
-
 const App = ({ children }: Props) => {
-  const [web3, setWeb3] = useState<IWeb3Context>(initialeValue)
+  const [web3, setWeb3] = useState(initialeWeb3State)
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
     let cleanup = () => {}
@@ -39,13 +37,17 @@ const App = ({ children }: Props) => {
           setWeb3((w) => ({ ...w, provider, value: w.value + 1 }))
         }
 
+        const message = (payload: any) => console.log(payload)
+
         const gProvider = provider.provider as WalletProvider
         gProvider.on("chainChanged", chainChanged)
         gProvider.on("accountsChanged", accountsChanged)
+        gProvider.on("message", message)
 
         cleanup = () => {
           gProvider.removeListener("chainChanged", chainChanged)
           gProvider.removeListener("accountsChanged", accountsChanged)
+          gProvider.removeListener("message", message)
         }
 
         await provider.send("eth_requestAccounts", [])
@@ -54,15 +56,10 @@ const App = ({ children }: Props) => {
       }
     }
 
+    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches)
     effect().catch((e) => console.error(e))
 
     return cleanup
-  }, [])
-
-  const [darkMode, setDarkMode] = useState(false)
-
-  useEffect(() => {
-    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches)
   }, [])
 
   return (

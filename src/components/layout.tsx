@@ -88,13 +88,14 @@ const Footer: NextComponentType = () => {
   )
 }
 
+const initialState = {
+  address: "connect",
+  balance: BigNumber.from(0),
+}
+
 const AccountBtn = () => {
   const web3 = useContext(Web3Context)
-  const [{ address, balance }, setUser] = useState({
-    address: "connect",
-    balance: BigNumber.from(0),
-  })
-  const [openModal, setModal] = useState(false)
+  const [{ address, balance }, setUser] = useState(initialState)
 
   useEffect(() => {
     const init = async () => {
@@ -102,7 +103,11 @@ const AccountBtn = () => {
 
       if (provider) {
         const s = provider.getSigner()
-        const [address, balance] = await Promise.all([s.getAddress(), s.getBalance()])
+        let [address, balance] = await Promise.all([s.getAddress(), s.getBalance()])
+        if (address.length == 0) {
+          address = initialState.address
+          balance = initialState.balance
+        }
         setUser({ address, balance })
       }
     }
@@ -122,6 +127,7 @@ const AccountBtn = () => {
     borderRadius: "50px",
   }
 
+  const [openModal, setModal] = useState(false)
   const handleModal = () => setModal(!openModal)
 
   return (
@@ -139,7 +145,23 @@ const AccountBtn = () => {
             Account
           </header>
           <p>
-            {formatAddress(address)}
+            <ul>
+              <li>{formatAddress(address)}</li>
+            </ul>
+          </p>
+          <p>
+            <a href={`https://polygonscan.com/address/${address}`} target="_blank" rel="noopener noreferrer">
+              <small>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                  <path
+                    fillRule="evenodd"
+                    d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"
+                  />
+                  <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                </svg>{" "}
+                view on explorer
+              </small>
+            </a>
           </p>
         </article>
       </dialog>

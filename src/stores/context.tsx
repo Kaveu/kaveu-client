@@ -1,6 +1,6 @@
+import { createContext } from "react"
 import type { Dispatch, SetStateAction } from "react"
 import type { Contract, providers } from "ethers"
-import { createContext } from "react"
 
 export interface IWeb3Context {
   value: number
@@ -8,7 +8,7 @@ export interface IWeb3Context {
   kaveu?: Contract
 }
 
-let initialeWeb3State: IWeb3Context = {
+export const initialeWeb3State: IWeb3Context = {
   value: 0,
 }
 

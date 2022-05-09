@@ -5,7 +5,6 @@ import { Fragment, useContext, useState } from "react"
 
 const Store: NextPage = () => {
   const { kaveu } = useContext(Web3Context)
-  const [k, h] = useState()
 
   return (
     <Fragment>
@@ -14,14 +13,22 @@ const Store: NextPage = () => {
       </Head>
 
       <section>
-        <article>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi libero sunt cum, provident distinctio aspernatur adipisci ad voluptas deleniti asperiores doloribus aliquid, recusandae non
-            id exercitationem, delectus harum similique dolorum? Rem quidem laudantium adipisci laborum quae repudiandae ad id ipsa, nesciunt error eaque? Doloremque libero amet asperiores, a omnis
-            aliquam dolorum consectetur perspiciatis, id saepe distinctio reprehenderit laboriosam, magnam odio? Adipisci voluptate deleniti distinctio corporis sint, quo iusto corrupti eligendi vitae
-            nisi autem magnam nam dolor sed blanditiis velit itaque doloribus, neque culpa, tempora in ea exercitationem. Deleniti, amet perspiciatis?
-          </p>
-        </article>
+        <hgroup>
+          <h1>Store</h1>
+          <h5>This section provides a marketplace to lend, borrow, sell and buy #KVUs.</h5>
+          <blockquote>
+            "Maecenas vehicula metus tellus, vitae congue turpis hendrerit non. Nam at dui sit amet ipsum cursus ornare."
+            <footer>
+              <cite>- Phasellus eget lacinia</cite>
+            </footer>
+          </blockquote>
+        </hgroup>
+        <div className="grid">
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+          <div>4</div>
+        </div>
       </section>
     </Fragment>
   )
