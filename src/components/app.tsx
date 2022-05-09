@@ -1,4 +1,4 @@
-import { IWeb3Context, Web3Context } from "@stores/context"
+import { IWeb3Context, ThemeContext, Web3Context } from "@stores/context"
 import { kaveuContract } from "@stores/contract"
 import { providers } from "ethers"
 import React, { ReactNode, useEffect, useState } from "react"
@@ -59,9 +59,17 @@ const App = ({ children }: Props) => {
     return cleanup
   }, [])
 
+  const [darkMode, setDarkMode] = useState(false)
+
+  useEffect(() => {
+    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches)
+  }, [])
+
   return (
     <Web3Context.Provider value={web3}>
-      <Layout>{children}</Layout>
+      <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
+        <Layout>{children}</Layout>
+      </ThemeContext.Provider>
     </Web3Context.Provider>
   )
 }
