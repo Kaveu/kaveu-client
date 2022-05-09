@@ -29,37 +29,48 @@ const Navigation: NextComponentType = () => {
 
   const handleDarkMode = () => setDarkMode((r) => !r)
 
+  const [menuActive, setMenuActive] = useState(false)
+  const toogleMenu = () => setMenuActive((r) => !r)
+  const closeMenu = () => setMenuActive(false)
+
   return (
     <nav>
       <ul>
         <li>
           <Link href="/">
-            <a style={{ color: "black" }}>
+            <a>
               <strong>Kaveu.</strong>
             </a>
           </Link>
         </li>
       </ul>
-      <ul>
-        <li>
+      <ul className={`nav-menu ${menuActive ? "active" : ""}`}>
+        <li onClick={closeMenu}>
           <Link href="/">Home</Link>
         </li>
-        <li>
+        <li onClick={closeMenu}>
           <Link href="/metrics">Metrics</Link>
         </li>
-        <li>
+        <li onClick={closeMenu}>
           <Link href="/store">Store</Link>
         </li>
-        <li>
+        <li onClick={closeMenu}>
           <Link href="/roadmap">Roadmap</Link>
         </li>
         <li>
-          <WalletBtn />
+          <AccountBtn />
         </li>
         <li>
           <button style={darkModeStyle} onClick={handleDarkMode}>
             {darkMode ? sun() : moon()}
           </button>
+        </li>
+      </ul>
+      <ul className={`hamburger ${menuActive ? "active" : ""}`} onClick={toogleMenu}>
+        <li>
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
         </li>
       </ul>
     </nav>
@@ -77,7 +88,7 @@ const Footer: NextComponentType = () => {
   )
 }
 
-const WalletBtn = () => {
+const AccountBtn = () => {
   const web3 = useContext(Web3Context)
   const [{ address, balance }, setUser] = useState({
     address: "connect",
@@ -125,11 +136,10 @@ const WalletBtn = () => {
         <article style={{ padding: "var(--font-size)" }}>
           <header>
             <a onClick={handleModal} href="#close" aria-label="Close" className="close"></a>
-            Modal title
+            Account
           </header>
           <p>
-            Nunc nec ligula a tortor sollicitudin dictum in vel enim. Quisque facilisis turpis vel eros dictum aliquam et nec turpis. Sed eleifend a dui nec ullamcorper. Praesent vehicula lacus ac
-            justo accumsan ullamcorper.
+            {formatAddress(address)}
           </p>
         </article>
       </dialog>
@@ -142,21 +152,25 @@ interface Props {
 }
 
 const Layout = ({ children }: Props) => {
-  const { darkMode, setDarkMode } = useContext(ThemeContext)
-  useEffect(() => setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches), [])
+  const { darkMode } = useContext(ThemeContext)
+
+  const dark: CSSProperties = {
+    backgroundColor: "hsla(180,0%,1%,0.75)",
+    backgroundImage: `radial-gradient(at 13% 67%, hsla(318,97%,78%,1) 0px, transparent 50%),
+    radial-gradient(at 76% 72%, hsla(183,70%,65%,1) 0px, transparent 50%)`,
+    backgroundAttachment: "fixed",
+  }
 
   return (
-    <React.Fragment>
-      <header className="container-fluid" data-theme={darkMode ? "dark" : "light"}>
+    <div id="_layout" data-theme={darkMode ? "dark" : "light"} style={dark}>
+      <header className="container-fluid">
         <Navigation />
       </header>
-      <main className="container" data-theme={darkMode ? "dark" : "light"}>
-        {children}
-      </main>
-      <footer className="container-fluid" data-theme={darkMode ? "dark" : "light"}>
+      <main className="container">{children}</main>
+      <footer className="container-fluid">
         <Footer />
       </footer>
-    </React.Fragment>
+    </div>
   )
 }
 
