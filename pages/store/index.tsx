@@ -17,7 +17,7 @@ const Store: NextPage = () => {
           <h1>Store</h1>
           <h5>This section provides a marketplace to lend, borrow, sell and buy #KVUs.</h5>
           <blockquote>
-            "Maecenas vehicula metus tellus, vitae congue turpis hendrerit non. Nam at dui sit amet ipsum cursus ornare."
+            &quot;Maecenas vehicula metus tellus, vitae congue turpis hendrerit non. Nam at dui sit amet ipsum cursus ornare.&quot;
             <footer>
               <cite>- Phasellus eget lacinia</cite>
             </footer>
