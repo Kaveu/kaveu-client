@@ -6,6 +6,7 @@ export interface IWeb3Context {
   value: number
   provider?: providers.Web3Provider
   kaveu?: Contract
+  kUtils?: Contract
 }
 
 export const initialeWeb3State: IWeb3Context = {

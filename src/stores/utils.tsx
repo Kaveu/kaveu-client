@@ -15,3 +15,10 @@ export const formatBalance = (balance: BigNumber) => {
   }
   return balanceStr
 }
+
+export const formatIpfsUri = (uri: string) => {
+  // uri 'ipfs://[CID]/[file]'
+  // return 'ipfs/[CID]/[file]'
+  const _uri = uri.split(":/")
+  return _uri[0] + _uri[1]
+}

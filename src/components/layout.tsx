@@ -57,6 +57,9 @@ const Navigation: NextComponentType = () => {
         <li onClick={closeMenu}>
           <Link href="/roadmap">Roadmap</Link>
         </li>
+        <li onClick={closeMenu}>
+          <Link href="/about">About</Link>
+        </li>
         <li>
           <AccountBtn />
         </li>
@@ -144,11 +147,9 @@ const AccountBtn = () => {
             <a onClick={handleModal} href="#close" aria-label="Close" className="close"></a>
             Account
           </header>
-          <p>
-            <ul>
-              <li>{formatAddress(address)}</li>
-            </ul>
-          </p>
+          <ul>
+            <li>{formatAddress(address)}</li>
+          </ul>
           <p>
             <a href={`https://polygonscan.com/address/${address}`} target="_blank" rel="noopener noreferrer">
               <small>

@@ -1,6 +1,7 @@
+import { Fragment } from "react"
 import type { NextPage } from "next"
 import Head from "next/head"
-import { Fragment } from "react"
+import Image from "next/image"
 
 const Home: NextPage = () => {
   return (
@@ -13,10 +14,7 @@ const Home: NextPage = () => {
       <section>
         <article>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo distinctio vero asperiores eum laboriosam nihil expedita enim illo amet velit, ut totam voluptates neque facere modi? Illum
-            iste excepturi pariatur! Molestias quo dolorum optio dicta quam sequi asperiores corporis, velit dolorem deserunt repellendus. Aliquid unde voluptas velit pariatur explicabo eius
-            temporibus labore eos veritatis, eum assumenda accusantium numquam placeat laborum. Quis repellendus tempora aliquid non. Quibusdam iste consequuntur debitis earum praesentium inventore
-            eius numquam labore consectetur distinctio odit corporis eos fugiat obcaecati, illum sint sunt vel incidunt placeat nulla quam!
+            <Image priority width={900} height={455} src="/page-under-construction.webp" layout="responsive" />
           </p>
         </article>
       </section>

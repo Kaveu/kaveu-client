@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react"
 import { providers } from "ethers"
 import { initialeWeb3State, ThemeContext, Web3Context } from "@stores/context"
-import { kaveuContract } from "@stores/contract"
+import { kaveuContract, kaveuUtils } from "@stores/contract"
 import Layout from "./layout"
 
 // https://docs.metamask.io/guide/ethereum-provider.html#events
@@ -29,7 +29,8 @@ const App = ({ children }: Props) => {
 
         const chainChanged = async () => {
           const kaveu = kaveuContract(await provider.getNetwork())
-          setWeb3((w) => ({ ...w, kaveu, value: w.value + 1 }))
+          const kUtils = kaveuUtils(await provider.getNetwork())
+          setWeb3((w) => ({ ...w, kaveu, kUtils, value: w.value + 1 }))
         }
 
         const accountsChanged = async () => {
@@ -52,7 +53,8 @@ const App = ({ children }: Props) => {
 
         await provider.send("eth_requestAccounts", [])
         const kaveu = kaveuContract(await provider.getNetwork())
-        setWeb3(({ value: val }) => ({ provider, kaveu, value: val++ }))
+        const kUtils = kaveuUtils(await provider.getNetwork())
+        setWeb3(({ value: val }) => ({ provider, kaveu, kUtils, value: val++ }))
       }
     }
 

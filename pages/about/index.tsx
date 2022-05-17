@@ -3,11 +3,12 @@ import type { NextPage } from "next"
 import Head from "next/head"
 import Image from "next/image"
 
-const Store: NextPage = () => {
+const About: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>Kaveu | Metrics</title>
+        <title>Kaveu | About</title>
+        <meta name="description" content="Run an arbitrage bot thought the power of blockchain." />
       </Head>
 
       <section>
@@ -21,4 +22,4 @@ const Store: NextPage = () => {
   )
 }
 
-export default Store
+export default About
