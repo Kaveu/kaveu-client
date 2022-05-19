@@ -58,7 +58,7 @@ const App = ({ children }: Props) => {
       }
     }
 
-    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches)
+    // setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches)
     effect().catch((e) => console.error(e))
 
     return cleanup

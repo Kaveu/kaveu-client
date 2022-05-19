@@ -52,7 +52,7 @@ const Navigation: NextComponentType = () => {
           <Link href="/metrics">Metrics</Link>
         </li>
         <li onClick={closeMenu}>
-          <Link href="/store">Store</Link>
+          <Link href="/nfts">NFTs</Link>
         </li>
         <li onClick={closeMenu}>
           <Link href="/roadmap">Roadmap</Link>
@@ -184,8 +184,12 @@ const Layout = ({ children }: Props) => {
     backgroundAttachment: "fixed",
   }
 
+  const light: CSSProperties = {
+    backgroundColor: "#f9f9f9",
+  }
+
   return (
-    <div id="_layout" data-theme={darkMode ? "dark" : "light"} style={dark}>
+    <div id="_layout" data-theme={darkMode ? "dark" : "light"} style={darkMode ? dark : light}>
       <header className="container-fluid">
         <Navigation />
       </header>

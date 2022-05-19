@@ -1,18 +1,18 @@
 import { Fragment } from "react"
 import type { NextPage } from "next"
 import Head from "next/head"
-import StoreSection from "@components/store.section"
+import NftsSection from "@components/nfts.section"
 
-const Store: NextPage = () => {
+const Nfts: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>Kaveu | Store</title>
+        <title>Kaveu | NFTs</title>
       </Head>
 
-      <StoreSection />
+      <NftsSection />
     </Fragment>
   )
 }
 
-export default Store
+export default Nfts
